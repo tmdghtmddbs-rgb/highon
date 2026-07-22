@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>하이온짐 광명점 · 방문기록지</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+  :root{
+    --ink:#EAF6FF;
+    --ink-soft:#DCEFFE;
+    --accent:#2FA8F0;
+    --accent-dark:#0B7BC7;
+    --accent-soft:#E4F4FF;
+    --sun:#FFC94D;
+    --sun-soft:#FFF6DF;
+    --page-bg:#F6FBFF;
+    --card-bg:#ffffff;
+    --input-bg:#EFF7FD;
+    --text-dark:#233043;
+    --text-gray:#7C8BA0;
+    --border:#DCEBF7;
+    --req:#FF7A7A;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    background:var(--page-bg);
+    color:var(--text-dark);
+  }
+  .page{max-width:480px;margin:0 auto;padding:14px 14px 40px;}
+
+  /* ---------- 히어로(브랜드 배너) ---------- */
+  .hero{
+    background:linear-gradient(160deg,#EAF6FF 0%,#F8FCFF 65%,#ffffff 100%);
+    border:1.5px solid var(--border);
+    border-radius:22px;
+    padding:18px 18px 20px;
+    margin-bottom:14px;
+    color:var(--text-dark);
+  }
+  .hero-top{display:flex;align-items:center;gap:10px;}
+  .brandmark{
+    width:40px;height:40px;border-radius:12px;background:var(--accent);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;flex-shrink:0;
+    letter-spacing:-0.5px;box-shadow:0 4px 10px rgba(47,168,240,0.35);
+  }
+  .brand-text{flex:1;line-height:1.15;}
+  .brand-name{font-weight:800;font-size:16px;letter-spacing:0.2px;color:var(--text-dark);}
+  .brand-branch{font-size:11.5px;color:var(--accent-dark);font-weight:700;}
+  .header-icons{display:flex;gap:6px;}
+  .icon-btn{
+    width:34px;height:34px;border-radius:10px;border:1.5px solid var(--border);
+    background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--accent-dark);
+  }
+  .icon-btn svg{width:16px;height:16px;}
+  .hero-message{margin-top:16px;}
+  .msg-title{font-weight:800;font-size:16.5px;margin:0 0 4px;color:var(--text-dark);}
+  .msg-sub{font-size:12.5px;color:var(--text-gray);margin:0;}
+  .tip-line{
+    margin-top:12px;background:var(--sun-soft);border-left:3px solid var(--sun);
+    color:#8A6A16;font-size:12px;border-radius:8px;padding:9px 11px;line-height:1.45;
+  }
+
+  .card{background:var(--card-bg);border-radius:16px;padding:20px;box-shadow:0 2px 10px rgba(27,31,39,0.06);margin-bottom:14px;border:1px solid var(--border);}
+  .field{margin-bottom:20px;}
+  .field label{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;margin-bottom:8px;color:var(--text-dark);}
+  .req{color:var(--req);font-weight:800;}
+  .tag{font-size:10.5px;font-weight:700;color:var(--accent-dark);background:var(--accent-soft);border-radius:5px;padding:2px 6px;letter-spacing:0.2px;}
+  .row{display:flex;gap:8px;align-items:center;}
+  input[type="text"],input[type="tel"],input[type="datetime-local"],input[type="password"]{
+    width:100%;padding:13px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--input-bg);
+    font-size:15px;color:var(--text-dark);outline:none;font-family:inherit;
+  }
+  input::placeholder{color:#ABA598;}
+  input:focus{border-color:var(--accent);background:#fff;}
+  .prefix{
+    background:var(--accent-soft);color:var(--accent-dark);padding:13px 14px;border-radius:10px;font-weight:700;
+  }
+  .toggle-group{display:flex;gap:8px;}
+  .toggle-btn{
+    flex:1;padding:13px 8px;border-radius:12px;border:1.5px solid var(--border);background:#fff;
+    font-size:14.5px;font-weight:700;color:#54627A;cursor:pointer;transition:all .12s;font-family:inherit;
+  }
+  .toggle-btn.selected{border-color:var(--accent);color:#fff;background:var(--accent);}
+  .chip-group{display:flex;flex-wrap:wrap;gap:7px;}
+  .chip{
+    padding:9px 13px;border-radius:10px;border:1.5px solid var(--border);background:#fff;
+    font-size:13px;font-weight:600;color:#54627A;cursor:pointer;transition:all .12s;font-family:inherit;
+  }
+  .chip.selected{border-color:var(--accent);color:#fff;background:var(--accent);}
+  .pill-row{display:flex;align-items:center;justify-content:flex-end;}
+  .pill{
+    display:inline-flex;align-items:center;gap:0;background:var(--accent-soft);border:1.5px solid var(--ink-soft);
+    border-radius:10px;padding:6px 4px 6px 12px;
+  }
+  .pill .value{color:var(--accent-dark);font-weight:800;font-size:13.5px;}
+  .pill .change{
+    background:transparent;border:none;color:#6FA9D6;font-size:12px;font-weight:600;
+    padding:5px 9px;cursor:pointer;text-decoration:underline;text-underline-offset:2px;
+  }
+  .field-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;}
+  .field-header label{margin-bottom:0;}
+  .info-note{
+    background:var(--sun-soft);border:1.5px dashed var(--sun);border-radius:12px;padding:14px;margin-bottom:20px;
+  }
+  .info-note-title{display:flex;align-items:center;gap:6px;font-weight:800;font-size:13.5px;margin-bottom:8px;color:var(--text-dark);}
+  .info-note p{font-size:12.5px;line-height:1.5;color:#7A6A3D;margin:0 0 10px;}
+  .qr-box{display:flex;gap:12px;align-items:flex-start;}
+  .qr-placeholder{
+    width:72px;height:72px;border:1.5px dashed var(--accent);border-radius:10px;flex-shrink:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;color:var(--accent-dark);text-align:center;gap:4px;background:#fff;
+  }
+  .qr-placeholder svg{width:26px;height:26px;}
+  .account-note{font-size:11px;color:var(--text-gray);margin-top:6px;}
+  .submit-btn{
+    width:100%;padding:16px;border:none;border-radius:14px;background:var(--accent);color:#fff;
+    font-size:15.5px;font-weight:800;cursor:pointer;letter-spacing:0.3px;font-family:inherit;
+    box-shadow:0 6px 14px rgba(47,168,240,0.35);
+  }
+  .submit-btn:disabled{opacity:0.55;cursor:not-allowed;}
+  .today-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .today-header span{font-weight:800;font-size:13.5px;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:6px;}
+  .today-header span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;}
+  .switch{position:relative;display:inline-block;width:38px;height:22px;}
+  .switch input{opacity:0;width:0;height:0;}
+  .slider{position:absolute;cursor:pointer;inset:0;background:#DDD6C7;border-radius:999px;transition:.2s;}
+  .slider:before{content:"";position:absolute;height:16px;width:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;}
+  input:checked + .slider{background:var(--accent);}
+  input:checked + .slider:before{transform:translateX(16px);}
+  .today-list .empty{text-align:center;color:var(--text-gray);font-size:13px;padding:24px 0;}
+  .visit-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed var(--border);font-size:13px;}
+  .visit-item:last-child{border-bottom:none;}
+  .visit-item .vi-name{font-weight:800;}
+  .visit-item .vi-meta{color:var(--text-gray);font-size:11.5px;}
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(20,40,60,0.45);display:flex;align-items:center;justify-content:center;
+    padding:20px;z-index:50;
+  }
+  .modal-overlay.hidden{display:none;}
+  .modal{background:#fff;border-radius:18px;padding:28px 24px;max-width:360px;width:100%;text-align:center;}
+  .modal-icon{
+    width:46px;height:46px;border-radius:14px;background:var(--accent-soft);color:var(--accent-dark);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:20px;
+  }
+  .modal h3{margin:0 0 6px;font-size:17px;color:var(--text-dark);}
+  .modal p{font-size:13px;color:var(--text-gray);margin:0 0 16px;line-height:1.5;}
+  .modal input{margin-bottom:14px;text-align:center;}
+  .cancel-btn{
+    width:100%;padding:13px;border:1.5px solid var(--border);border-radius:12px;background:#fff;color:#54627A;
+    font-size:14.5px;font-weight:700;cursor:pointer;margin-top:8px;font-family:inherit;
+  }
+  .instructions{text-align:left;font-size:12.5px;color:#54627A;line-height:1.6;margin-bottom:16px;}
+  .instructions b{color:var(--text-dark);}
+  .instructions .note{color:var(--text-gray);font-size:11.5px;margin-top:8px;}
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--accent-dark);color:#fff;
+    padding:12px 20px;border-radius:12px;font-size:13px;font-weight:700;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;
+    max-width:85%;text-align:center;
+  }
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <div class="hero-top">
+      <div class="brandmark">HI</div>
+      <div class="brand-text">
+        <div class="brand-name">하이온짐</div>
+        <div class="brand-branch" id="branchLabel">광명점</div>
+      </div>
+      <div class="header-icons">
+        <button type="button" class="icon-btn" id="btnSheet" title="스프레드시트 열람">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+        </button>
+        <button type="button" class="icon-btn" id="btnHome" title="홈 화면에 추가">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="hero-message">
+      <p class="msg-title">밝고 상쾌하게, 상담 도와드릴게요 ☀️</p>
+      <p class="msg-sub" id="branchGreeting">하이온짐에 방문해주셔서 감사합니다.</p>
+    </div>
+    <div class="tip-line">💬 성함, 연락처, 방문경로만 알려주시면 바로 센터 투어를 도와드려요!</div>
+  </div>
+
+  <form class="card" id="visitForm">
+    <div class="field">
+      <label>방문일시 <span class="req">*</span></label>
+      <div class="row">
+        <input type="datetime-local" id="visitDate" required>
+        <button type="button" class="icon-btn" id="btnRefreshDate" title="현재 시각으로 갱신" style="border-color:var(--border);background:var(--input-bg);color:var(--text-dark);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>이름 <span class="req">*</span></label>
+      <input type="text" id="visitorName" placeholder="방문자 성함" required>
+    </div>
+
+    <div class="field">
+      <label>연락처 <span class="req">*</span></label>
+      <div class="row">
+        <div class="prefix">010</div>
+        <input type="tel" id="phone" placeholder="12345678" maxlength="9" required>
+      </div>
+    </div>
+
+    <div id="visitTypeSlot"></div>
+    <div id="dynamicFields"></div>
+
+    <div class="field">
+      <label>상담자 <span class="tag">선택</span></label>
+      <input type="text" id="counselor" placeholder="응대한 트레이너명">
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">방문 기록 저장</button>
+  </form>
+
+  <div class="card today-card">
+    <div class="today-header">
+      <span>Today's Visit</span>
+      <label class="switch">
+        <input type="checkbox" id="autoRefreshToggle" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="today-list" id="todayList">
+      <p class="empty">아직 오늘 방문 기록이 없습니다</p>
+    </div>
+  </div>
+</div>
+
+<!-- 비밀번호 모달 -->
+<div class="modal-overlay hidden" id="pwModal">
+  <div class="modal">
+    <div class="modal-icon">🔒</div>
+    <h3>비밀번호</h3>
+    <p>스프레드시트 열람용 비밀번호를 입력하세요.</p>
+    <input type="password" id="pwInput" placeholder="">
+    <button type="button" class="submit-btn" id="pwOpenBtn">열기</button>
+    <button type="button" class="cancel-btn" id="pwCancelBtn">취소</button>
+  </div>
+</div>
+
+<!-- 홈 화면 추가 모달 -->
+<div class="modal-overlay hidden" id="homeModal">
+  <div class="modal">
+    <div class="modal-icon">📱</div>
+    <h3>홈 화면에 추가</h3>
+    <div class="instructions">
+      <p><b>iPhone / iPad</b><br>Safari 하단 공유(⬆️) → '홈 화면에 추가'</p>
+      <p><b>Android</b><br>Chrome 우측 상단 ⋮ → '홈 화면에 추가'</p>
+      <p class="note">앱처럼 전체화면으로 열리고, 지점이 고정됩니다.</p>
+    </div>
+    <button type="button" class="submit-btn" id="homeCloseBtn">확인</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   지점(branch)별 설정 — branches.js 역할
+   ?branch=xxx 쿼리 파라미터로 지점을 구분합니다.
+   ========================================================= */
+const BRANCH_CONFIG = {
+  "hi-on-gwangmyeong": {
+    displayName: "광명점",
+    fullName: "하이온짐 광명점",
+    webAppUrl: "https://script.google.com/macros/s/AKfycbwaUgTTDnSyjVnoWf0tqOszfLpxtPedBRVPdXqXc2A1YtNCnUyiHbRJvMW1bpS1WTHbeQ/exec", // Apps Script 배포 후 URL을 여기 붙여넣으세요
+    sheetPassword: "9797", // 스프레드시트 열람용 비밀번호 (원하는 값으로 변경)
+    bank: null // 예: { bankName: "국민은행", account: "123-456-789012", holder: "홍길동" }
+  }
+  // 다른 지점을 추가하려면 아래처럼 항목을 늘리세요:
+  // "hi-on-otherbranch": { displayName: "OO점", fullName: "하이온짐 OO점", webAppUrl: "...", sheetPassword: "0000", bank: {...} }
+};
+const DEFAULT_BRANCH = "hi-on-gwangmyeong";
+
+const params = new URLSearchParams(location.search);
+const branchKey = params.get("branch") || DEFAULT_BRANCH;
+const branch = BRANCH_CONFIG[branchKey] || BRANCH_CONFIG[DEFAULT_BRANCH];
+document.getElementById("branchLabel").textContent = branch.displayName;
+document.getElementById("branchGreeting").textContent = `${branch.fullName}에 방문해주셔서 감사합니다.`;
+
+/* =========================================================
+   선택지 옵션 (자유롭게 수정하세요)
+   ========================================================= */
+const OPTIONS = {
+  consultItems: ["헬스", "1:1 PT"],
+  visitRoute: [
+    "간판&배너","전단지","현수막&족자","아파트게시판",
+    "파워링크","지도검색","블로그","인스타광고",
+    "인스타검색","카카오채널/카톡","운동닥터","짐노트",
+    "다짐","당근","지인소개"
+  ],
+  revisitReasons: ["시설 만족","접근성","가격","트레이너","지인과 함께","등록 고민중"]
+};
+
+/* =========================================================
+   폼 상태
+   ========================================================= */
+const state = {
+  visitType: null,       // 상담 | 일일권 | 기타
+  consultItems: [],
+  visitRoute: [],
+  visitCount: null,      // 첫방문 | 재방문
+  revisitReasons: [],
+  reviewEvent: null,     // 참여 | 미참여
+  visitReason: ""
+};
+
+function pad(n){return String(n).padStart(2,"0");}
+function nowLocalValue(){
+  const d = new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+document.getElementById("visitDate").value = nowLocalValue();
+document.getElementById("btnRefreshDate").addEventListener("click", ()=>{
+  document.getElementById("visitDate").value = nowLocalValue();
+});
+
+/* ---------- 방문유형 (최상위 스텝) ---------- */
+const visitTypeSlot = document.getElementById("visitTypeSlot");
+function renderVisitType(){
+  visitTypeSlot.innerHTML = "";
+  const field = document.createElement("div");
+  field.className = "field";
+  if(!state.visitType){
+    field.innerHTML = `
+      <label>방문유형 <span class="req">*</span></label>
+      <div class="toggle-group" id="visitTypeGroup">
+        <button type="button" class="toggle-btn" data-v="상담">상담</button>
+        <button type="button" class="toggle-btn" data-v="일일권">일일권</button>
+        <button type="button" class="toggle-btn" data-v="기타">기타</button>
+      </div>`;
+    visitTypeSlot.appendChild(field);
+    field.querySelectorAll(".toggle-btn").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        state.visitType = btn.dataset.v;
+        state.consultItems=[]; state.visitRoute=[]; state.visitCount=null;
+        state.revisitReasons=[]; state.reviewEvent=null; state.visitReason="";
+        renderVisitType();
+        renderDynamicFields();
+      });
+    });
+  } else {
+    field.innerHTML = `
+      <div class="field-header">
+        <label>방문유형 <span class="req">*</span></label>
+        <div class="pill-row">
+          <div class="pill"><span class="value">${state.visitType}</span><button type="button" class="change">변경</button></div>
+        </div>
+      </div>`;
+    visitTypeSlot.appendChild(field);
+    field.querySelector(".change").addEventListener("click", ()=>{
+      state.visitType = null;
+      renderVisitType();
+      renderDynamicFields();
+    });
+  }
+}
+
+/* ---------- 방문유형에 따른 하위 필드 ---------- */
+const dynamicFields = document.getElementById("dynamicFields");
+
+function toggleChip(arr, value){
+  const i = arr.indexOf(value);
+  if(i>=0) arr.splice(i,1); else arr.push(value);
+}
+
+function multiSelectField({title, required, tagText, options, selected, collapsed, onToggle, onCollapseChange}){
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  if(collapsed && selected.length){
+    wrap.innerHTML = `
+      <div class="field-header">
+        <label>${title} ${required?'<span class="req">*</span>':''}</label>
+        <div class="pill-row"><div class="pill"><span class="value">${selected.join(", ")}</span><button type="button" class="change">변경</button></div></div>
+      </div>`;
+    wrap.querySelector(".change").addEventListener("click", ()=> onCollapseChange(false));
+  } else {
+    wrap.innerHTML = `
+      <div class="field-header">
+        <label>${title} ${required?'<span class="req">*</span>':''} <span class="tag">${tagText||"복수선택"}</span></label>
+      </div>
+      <div class="chip-group"></div>`;
+    const group = wrap.querySelector(".chip-group");
+    options.forEach(opt=>{
+      const chip = document.createElement("button");
+      chip.type="button"; chip.className="chip"+(selected.includes(opt)?" selected":"");
+      chip.textContent = opt;
+      chip.addEventListener("click", ()=>{ onToggle(opt); });
+      group.appendChild(chip);
+    });
+  }
+  return wrap;
+}
+
+function singleSelectField({title, required, optionalTag, options, selected, onSelect}){
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  if(selected){
+    wrap.innerHTML = `
+      <div class="field-header">
+        <label>${title} ${required?'<span class="req">*</span>':''}</label>
+        <div class="pill-row"><div class="pill"><span class="value">${selected}</span><button type="button" class="change">변경</button></div></div>
+      </div>`;
+    wrap.querySelector(".change").addEventListener("click", ()=> onSelect(null));
+  } else {
+    wrap.innerHTML = `
+      <div class="field-header">
+        <label>${title} ${required?'<span class="req">*</span>':(optionalTag?`<span class="tag">${optionalTag}</span>`:'')}</label>
+      </div>
+      <div class="toggle-group"></div>`;
+    const group = wrap.querySelector(".toggle-group");
+    options.forEach(opt=>{
+      const btn = document.createElement("button");
+      btn.type="button"; btn.className="toggle-btn";
+      btn.textContent = opt;
+      btn.addEventListener("click", ()=> onSelect(opt));
+      group.appendChild(btn);
+    });
+  }
+  return wrap;
+}
+
+// collapse 상태 저장(필드별)
+const collapseState = { consultItems:false, visitRoute:false, revisitReasons:false };
+
+function renderDynamicFields(){
+  dynamicFields.innerHTML = "";
+  if(!state.visitType) return;
+
+  if(state.visitType === "상담"){
+    dynamicFields.appendChild(multiSelectField({
+      title:"상담종목", required:true, options:OPTIONS.consultItems, selected: state.consultItems,
+      collapsed: collapseState.consultItems,
+      onToggle:(opt)=>{ toggleChip(state.consultItems, opt); collapseState.consultItems = state.consultItems.length>0; renderDynamicFields(); },
+      onCollapseChange:(v)=>{ collapseState.consultItems=v; renderDynamicFields(); }
+    }));
+    dynamicFields.appendChild(multiSelectField({
+      title:"방문경로", required:true, options:OPTIONS.visitRoute, selected: state.visitRoute,
+      collapsed: collapseState.visitRoute,
+      onToggle:(opt)=>{ toggleChip(state.visitRoute, opt); collapseState.visitRoute = state.visitRoute.length>0; renderDynamicFields(); },
+      onCollapseChange:(v)=>{ collapseState.visitRoute=v; renderDynamicFields(); }
+    }));
+  }
+
+  if(state.visitType === "일일권"){
+    dynamicFields.appendChild(singleSelectField({
+      title:"방문횟수", required:true, options:["첫방문","재방문"], selected: state.visitCount,
+      onSelect:(v)=>{ state.visitCount=v; if(v!=="재방문") state.revisitReasons=[]; renderDynamicFields(); }
+    }));
+    if(state.visitCount === "재방문"){
+      dynamicFields.appendChild(multiSelectField({
+        title:"재방문 사유", required:true, options:OPTIONS.revisitReasons, selected: state.revisitReasons,
+        collapsed: collapseState.revisitReasons,
+        onToggle:(opt)=>{ toggleChip(state.revisitReasons, opt); collapseState.revisitReasons = state.revisitReasons.length>0; renderDynamicFields(); },
+        onCollapseChange:(v)=>{ collapseState.revisitReasons=v; renderDynamicFields(); }
+      }));
+    }
+    if(state.visitCount){
+      dynamicFields.appendChild(singleSelectField({
+        title:"리뷰 이벤트 참여", required:false, optionalTag:"선택", options:["참여","미참여"], selected: state.reviewEvent,
+        onSelect:(v)=>{ state.reviewEvent=v; renderDynamicFields(); }
+      }));
+      // 일일권 결제 안내
+      const box = document.createElement("div");
+      box.className = "info-note";
+      const accountLine = branch.bank
+        ? `${branch.bank.bankName} ${branch.bank.account} (${branch.bank.holder})`
+        : "계좌번호 미등록 (branch 설정에서 bank 정보를 추가하세요)";
+      box.innerHTML = `
+        <div class="info-note-title">🧾 일일권 결제 안내</div>
+        <p>트레이너가 자리에 없다면 계좌이체 또는 네이버페이로 결제 부탁드립니다.</p>
+        <div class="qr-box">
+          <div class="qr-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><line x1="14" y1="14" x2="21" y2="14"/><line x1="14" y1="21" x2="21" y2="21"/><line x1="21" y1="14" x2="21" y2="21"/></svg>
+            네이버페이 QR
+          </div>
+          <p style="margin:0;">네이버페이로 결제하시면 임시 입장 방법이 공유됩니다.<br>(카메라를 켜시고 QR코드를 인식하시면 네이버페이로 연결됩니다)</p>
+        </div>
+        <div class="account-note">${accountLine}</div>`;
+      dynamicFields.appendChild(box);
+    }
+  }
+
+  if(state.visitType === "기타"){
+    const wrap = document.createElement("div");
+    wrap.className = "field";
+    wrap.innerHTML = `
+      <label>방문 사유 <span class="tag">선택</span></label>
+      <input type="text" id="visitReasonInput" placeholder="예: 시설 견학, 물품 수령">`;
+    dynamicFields.appendChild(wrap);
+    wrap.querySelector("#visitReasonInput").value = state.visitReason;
+    wrap.querySelector("#visitReasonInput").addEventListener("input", (e)=>{ state.visitReason = e.target.value; });
+  }
+}
+
+renderVisitType();
+
+/* =========================================================
+   제출
+   ========================================================= */
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=> t.classList.remove("show"), 2200);
+}
+
+document.getElementById("visitForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+
+  const name = document.getElementById("visitorName").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const visitDate = document.getElementById("visitDate").value;
+  const counselor = document.getElementById("counselor").value.trim();
+
+  if(!name || !phone || !visitDate || !state.visitType){
+    showToast("필수 항목을 모두 입력해주세요.");
+    return;
+  }
+  if(state.visitType==="상담" && (state.consultItems.length===0 || state.visitRoute.length===0)){
+    showToast("상담종목과 방문경로를 선택해주세요.");
+    return;
+  }
+  if(state.visitType==="일일권" && !state.visitCount){
+    showToast("방문횟수를 선택해주세요.");
+    return;
+  }
+  if(state.visitType==="일일권" && state.visitCount==="재방문" && state.revisitReasons.length===0){
+    showToast("재방문 사유를 선택해주세요.");
+    return;
+  }
+
+  const payload = {
+    branch: branchKey,
+    visitDate, name, phone: "010"+phone,
+    visitType: state.visitType,
+    consultItems: state.consultItems,
+    visitRoute: state.visitRoute,
+    visitCount: state.visitCount,
+    revisitReasons: state.revisitReasons,
+    reviewEvent: state.reviewEvent,
+    visitReason: state.visitReason,
+    counselor
+  };
+
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true; btn.textContent = "저장 중...";
+
+  try{
+    if(!branch.webAppUrl || branch.webAppUrl.startsWith("PASTE_")){
+      throw new Error("NO_WEBAPP_URL");
+    }
+    await fetch(branch.webAppUrl, {
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"}, // Apps Script CORS 단순 요청용
+      body: JSON.stringify(payload)
+    });
+    showToast("방문 기록이 저장되었습니다!");
+    document.getElementById("visitForm").reset();
+    document.getElementById("visitDate").value = nowLocalValue();
+    Object.assign(state, {visitType:null,consultItems:[],visitRoute:[],visitCount:null,revisitReasons:[],reviewEvent:null,visitReason:""});
+    renderVisitType(); renderDynamicFields();
+    loadTodayVisits();
+  }catch(err){
+    if(err.message === "NO_WEBAPP_URL"){
+      showToast("Apps Script Web App URL이 설정되지 않았습니다. (SETUP_GUIDE 참고)");
+    } else {
+      showToast("저장에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    }
+  }finally{
+    btn.disabled = false; btn.textContent = "방문 기록 저장";
+  }
+});
+
+/* =========================================================
+   오늘 방문 목록
+   ========================================================= */
+async function loadTodayVisits(){
+  const listEl = document.getElementById("todayList");
+  if(!branch.webAppUrl || branch.webAppUrl.startsWith("PASTE_")) return;
+  try{
+    const res = await fetch(`${branch.webAppUrl}?action=today&branch=${branchKey}`);
+    const data = await res.json();
+    if(!data.items || data.items.length===0){
+      listEl.innerHTML = `<p class="empty">아직 오늘 방문 기록이 없습니다</p>`;
+      return;
+    }
+    listEl.innerHTML = data.items.map(v=>`
+      <div class="visit-item">
+        <span class="vi-name">${v.name}</span>
+        <span class="vi-meta">${v.visitType||""} · ${v.time||""}</span>
+      </div>`).join("");
+  }catch(e){ /* 조용히 무시 */ }
+}
+loadTodayVisits();
+let autoRefreshTimer = setInterval(loadTodayVisits, 30000);
+document.getElementById("autoRefreshToggle").addEventListener("change",(e)=>{
+  if(e.target.checked){ autoRefreshTimer = setInterval(loadTodayVisits, 30000); loadTodayVisits(); }
+  else { clearInterval(autoRefreshTimer); }
+});
+
+/* =========================================================
+   모달: 스프레드시트 비밀번호
+   ========================================================= */
+const pwModal = document.getElementById("pwModal");
+document.getElementById("btnSheet").addEventListener("click", ()=> pwModal.classList.remove("hidden"));
+document.getElementById("pwCancelBtn").addEventListener("click", ()=>{
+  pwModal.classList.add("hidden");
+  document.getElementById("pwInput").value = "";
+});
+document.getElementById("pwOpenBtn").addEventListener("click", ()=>{
+  const val = document.getElementById("pwInput").value;
+  if(val === branch.sheetPassword){
+    pwModal.classList.add("hidden");
+    document.getElementById("pwInput").value = "";
+    // 실제 구글시트 링크로 연결 (Apps Script 설정에서 SHEET_URL을 알려주면 그 링크로 교체하세요)
+    window.open(branch.sheetUrl || "https://docs.google.com", "_blank");
+  } else {
+    showToast("비밀번호가 올바르지 않습니다.");
+  }
+});
+
+/* =========================================================
+   모달: 홈 화면에 추가
+   ========================================================= */
+const homeModal = document.getElementById("homeModal");
+document.getElementById("btnHome").addEventListener("click", ()=> homeModal.classList.remove("hidden"));
+document.getElementById("homeCloseBtn").addEventListener("click", ()=> homeModal.classList.add("hidden"));
+
+renderDynamicFields();
+</script>
+</body>
+</html>
